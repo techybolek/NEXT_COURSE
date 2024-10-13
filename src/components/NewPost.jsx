@@ -16,6 +16,7 @@ function NewPost({ onAddPost, onCancel }) {
 
     return (
         <form className={classes.form} onSubmit={submitHandler}>
+            <h2>Create a New Post</h2>
             <div>
                 <label htmlFor="author">Author</label>
                 <input
@@ -23,20 +24,23 @@ function NewPost({ onAddPost, onCancel }) {
                     id="author"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
+                    required
                 />
             </div>
             <div>
                 <label htmlFor="body">Body</label>
                 <textarea
                     id="body"
+                    rows="4"
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
+                    required
                 />
             </div>
-            <p className={classes.ations}>
+            <div className={classes.actions}>
                 <button type="button" onClick={onCancel}>Cancel</button>
                 <button type="submit">Add Post</button>
-            </p>
+            </div>
         </form>
     );
 }
