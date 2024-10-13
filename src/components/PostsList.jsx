@@ -11,16 +11,20 @@ function PostList({ isModalOpen, onCloseModal }) {
     useEffect(() => {
         async function fetchPosts() {
             try {
+                setIsFetching(true);
                 const response = await fetch('http://localhost:8080/posts');
                 const data = await response.json();
                 setPosts(data.posts);
+                setIsFetching(false);
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
         }
         fetchPosts();
     }, []);
+
     const [posts, setPosts] = useState([])
+    const [isFetching, setIsFetching] = useState(true);
 
     const addPostHandler = async (newPost) => {
         async function addPostToBackend(post) {
@@ -55,7 +59,8 @@ function PostList({ isModalOpen, onCloseModal }) {
                     <NewPost onAddPost={addPostHandler} onCancel={onCloseModal} />
                 </Modal>
             )}
-            {posts.length > 0 &&
+            {isFetching && <p>Loading posts...</p>}
+            {posts.length > 0 && !isFetching &&
                 <ul className={classes.posts}>
                     {posts.map((post) => (
                         <Post key={post.id} author={post.author} body={post.body} />

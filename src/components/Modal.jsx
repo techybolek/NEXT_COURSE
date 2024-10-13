@@ -4,16 +4,13 @@ import classes from './Modal.module.css';
 
 function Modal({ children, onClose }) {
   const modalRoot = document.getElementById('modal-root') || document.getElementById('root');
-  const rootName = modalRoot.id;
 
   return ReactDOM.createPortal(
-    <>
-      <div className={classes.backdrop} onClick={onClose}></div>
-      <dialog open className={classes.modal}>
-        <p>This modal is attached to: {rootName}</p>
+    <div className={classes.backdrop} onClick={onClose}>
+      <dialog open className={classes.modal} onClick={(e) => e.stopPropagation()}>
         {children}
       </dialog>
-    </>,
+    </div>,
     modalRoot
   );
 }
