@@ -1,16 +1,15 @@
 import PostList from "./components/PostsList";
 import MainHeader from "./components/MainHeader";
-import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModalHandler = () => setIsModalOpen(true);
-  const closeModalHandler = () => setIsModalOpen(false);
+  const location = useLocation();
+  const isCreatePostRoute = location.pathname === '/create-post';
 
   return (
     <>
-      <MainHeader onCreatePost={openModalHandler} />
-      <PostList isModalOpen={isModalOpen} onCloseModal={closeModalHandler} />
+      <MainHeader />
+      <PostList isModalOpen={isCreatePostRoute} />
     </>
   );
 }

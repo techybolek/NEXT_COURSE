@@ -4,8 +4,15 @@ import NewPost from "./NewPost";
 import Modal from "./Modal";
 import classes from "./PostsList.module.css";
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function PostList({ isModalOpen, onCloseModal }) {
+function PostList({ isModalOpen }) {
+    const navigate = useNavigate();
+
+    const handleCloseModal = () => {
+        navigate('/');
+    };
+
     //retrieve the list of posts from http://localhost:8080/posts
 
     useEffect(() => {
@@ -49,14 +56,14 @@ function PostList({ isModalOpen, onCloseModal }) {
             { id: prevPosts.length + 1, ...newPost },
             ...prevPosts,
         ]);
-        onCloseModal();
+        handleCloseModal();
     };
 
     return (
         <>
             {isModalOpen && (
-                <Modal onClose={onCloseModal}>
-                    <NewPost onAddPost={addPostHandler} onCancel={onCloseModal} />
+                <Modal onClose={handleCloseModal}>
+                    <NewPost onAddPost={addPostHandler} onCancel={handleCloseModal} />
                 </Modal>
             )}
             {isFetching && <p>Loading posts...</p>}
