@@ -7,6 +7,7 @@ import NewPost from './components/NewPost';
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
+  { path: "/hello", element: <h1>Hello World</h1> },
   { path: "/create-post", element: <NewPost /> }
 ]);
 

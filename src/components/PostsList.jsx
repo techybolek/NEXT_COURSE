@@ -14,7 +14,7 @@ function PostList({ isModalOpen, onCloseModal }) {
                 setIsFetching(true);
                 const response = await fetch('http://localhost:8080/posts');
                 const data = await response.json();
-                setPosts(data.posts);
+                setPosts(data.posts || []);
                 setIsFetching(false);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -60,7 +60,7 @@ function PostList({ isModalOpen, onCloseModal }) {
                 </Modal>
             )}
             {isFetching && <p>Loading posts...</p>}
-            {posts.length > 0 && !isFetching &&
+            {posts?.length > 0 && !isFetching &&
                 <ul className={classes.posts}>
                     {posts.map((post) => (
                         <Post key={post.id} author={post.author} body={post.body} />
