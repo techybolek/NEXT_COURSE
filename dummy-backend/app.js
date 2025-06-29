@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 app.get('/posts', async (req, res) => {
   const storedPosts = await getStoredPosts();
   console.log('Getting posts from backend...');
-  //await new Promise((resolve, reject) => setTimeout(() => resolve(), 2500));
+  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2500));
   res.json({ posts: storedPosts });
 });
 

@@ -1,26 +1,7 @@
 import { Outlet } from "react-router-dom";
-import { useState, useEffect } from "react";
 import PostList from "../components/PostList";
 
 function Posts() {
-  const [posts, setPosts] = useState([]);
-  const [isFetching, setIsFetching] = useState(true);
-
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        setIsFetching(true);
-        const response = await fetch("http://localhost:8080/posts");
-        const data = await response.json();
-        setPosts(data.posts || []);
-        setIsFetching(false);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setIsFetching(false);
-      }
-    }
-    fetchPosts();
-  }, []);
 
   const addPostHandler = async (newPost) => {
     try {
@@ -46,7 +27,7 @@ function Posts() {
   return (
     <>
       <main>
-        <PostList posts={posts} isFetching={isFetching} />
+        <PostList/>
       </main>
       <Outlet context={{ addPostHandler }} />
     </>
@@ -54,3 +35,9 @@ function Posts() {
 }
 
 export default Posts;
+
+export async function loader() {
+  const response = await fetch("http://localhost:8080/posts");
+  const data = await response.json();
+  return data.posts || [];
+}
