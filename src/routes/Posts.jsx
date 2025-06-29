@@ -1,7 +1,17 @@
-import { Outlet } from "react-router-dom";
+import React from "react";
+//@ts-check
+import { Outlet, useLoaderData } from "react-router-dom";
 import PostList from "../components/PostList";
+import { useState, useEffect } from "react";
 
 function Posts() {
+  const initialPosts = useLoaderData();
+  const [posts, setPosts] = useState(initialPosts);
+
+  // Keep posts state in sync with loader data
+  useEffect(() => {
+    setPosts(initialPosts);
+  }, [initialPosts]);
 
   const addPostHandler = async (newPost) => {
     try {
@@ -14,10 +24,7 @@ function Posts() {
       });
       const data = await response.json();
 
-      setPosts((prevPosts) => [
-        { id: prevPosts.length + 1, ...newPost },
-        ...prevPosts,
-      ]);
+      setPosts((prevPosts) => [data.post, ...prevPosts]);
     } catch (error) {
       console.error("Error adding post:", error);
       throw error;
@@ -27,7 +34,7 @@ function Posts() {
   return (
     <>
       <main>
-        <PostList/>
+        <PostList posts={posts}/>
       </main>
       <Outlet context={{ addPostHandler }} />
     </>

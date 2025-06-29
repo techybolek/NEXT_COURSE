@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "backend": "cd dummy-backend && npm start"
+    "backend": "cd dummy-backend && node app.js"
   },
   "dependencies": {
     "react": "^18.2.0",

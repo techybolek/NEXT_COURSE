@@ -30,6 +30,7 @@ app.get('/posts/:id', async (req, res) => {
 });
 
 app.post('/posts', async (req, res) => {
+  console.log('Creating a new post...');
   const existingPosts = await getStoredPosts();
   const postData = req.body;
   const newPost = {
