@@ -1,9 +1,8 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import Modal from './Modal';
-import NewPost from './NewPost';
-import Posts from './Posts';
+import Modal from '../components/Modal';
+import NewPostInner from '../components/NewPostInner';
 
-function CreatePost() {
+function NewPost() {
   const navigate = useNavigate();
   const { addPostHandler } = useOutletContext();
 
@@ -16,14 +15,15 @@ function CreatePost() {
     navigate('/');
   };
 
+  console.log('NewPost');
+
   return (
     <>
-      <Posts />
       <Modal onClose={handleClose}>
-        <NewPost onAddPost={handleAddPost} onCancel={handleClose} />
+        <NewPostInner onAddPost={handleAddPost} onCancel={handleClose} />
       </Modal>
     </>
   );
 }
 
-export default CreatePost; 
+export default NewPost; 

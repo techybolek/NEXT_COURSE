@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import classes from './NewPost.module.css';
+import { useNavigate } from 'react-router-dom';
 
-function NewPost({ onAddPost, onCancel }) {
+function NewPostInner({ onAddPost }) {
+    const navigate = useNavigate();
     const [author, setAuthor] = useState('');
     const [body, setBody] = useState('');
 
@@ -13,6 +15,7 @@ function NewPost({ onAddPost, onCancel }) {
             setBody('');
         }
     };
+
 
     return (
         <form className={classes.form} onSubmit={submitHandler}>
@@ -38,11 +41,11 @@ function NewPost({ onAddPost, onCancel }) {
                 />
             </div>
             <div className={classes.actions}>
-                <button type="button" onClick={onCancel}>Cancel</button>
+                <button type="button">Cancel</button>
                 <button type="submit">Add Post</button>
             </div>
         </form>
     );
 }
 
-export default NewPost;
+export default NewPostInner;
