@@ -42,4 +42,16 @@ app.post('/posts', async (req, res) => {
   res.status(201).json({ message: 'Stored new post.', post: newPost });
 });
 
+app.put('/posts/:id', async (req, res) => {
+  const existingPosts = await getStoredPosts();
+  const postIndex = existingPosts.findIndex((post) => post.id === req.params.id);
+  if (postIndex === -1) {
+    return res.status(404).json({ message: 'Post not found.' });
+  }
+  const updatedPost = { ...req.body, id: req.params.id };
+  existingPosts[postIndex] = updatedPost;
+  await storePosts(existingPosts);
+  res.json({ message: 'Post updated.', post: updatedPost });
+});
+
 app.listen(8080);

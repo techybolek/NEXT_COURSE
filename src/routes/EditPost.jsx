@@ -1,13 +1,12 @@
 import Modal from "../components/Modal";
-import { Form, redirect, Link, useNavigation } from "react-router-dom";
+import { Form, redirect, Link, useLoaderData, useNavigation } from "react-router-dom";
 import classes from "./NewPost.module.css";
 
-function NewPost() {
+function EditPost() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const isLoading = navigation.state === "loading";
-
-  console.log("NewPost");
+  const post = useLoaderData();
 
   return (
     <Modal>
@@ -17,22 +16,22 @@ function NewPost() {
           <div className={classes.spinner}></div>
         </div>
       ) : (
-        <Form method="post" className={classes.form}>
-          <h2>Create a New Post</h2>
+        <Form method="put" className={classes.form}>
+          <h2>Edit Post</h2>
           <div>
             <label htmlFor="author">Author</label>
-            <input type="text" id="author" name="author" required disabled={isSubmitting} />
+            <input type="text" id="author" name="author" required disabled={isSubmitting} defaultValue={post.author} />
           </div>
           <div>
             <label htmlFor="body">Body</label>
-            <textarea id="body" name="body" rows="4" required disabled={isSubmitting} />
+            <textarea id="body" name="body" rows="4" required disabled={isSubmitting} defaultValue={post.body} />
           </div>
           <div className={classes.actions}>
             <Link to='..' className={classes.actions}>
               Cancel
             </Link>
             <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Add Post"}
+              {isSubmitting ? "Saving..." : "Save Post"}
             </button>
           </div>
         </Form>
@@ -41,16 +40,16 @@ function NewPost() {
   );
 }
 
-export default NewPost;
+export default EditPost;
 
 export async function action({ request }) {
   try {
-    console.log('NewPost: Creating post');
+    console.log('EditPost: Saving post');
     const formData = await request.formData();
     const postData = Object.fromEntries(formData.entries());
 
-    const response = await fetch("http://localhost:8080/posts", {
-      method: "POST",
+    const response = await fetch("http://localhost:8080/posts/" + postData.id, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -68,4 +67,11 @@ export async function action({ request }) {
   } catch (error) {
     return { error: error.message };
   }
+}
+
+export async function loader({ params }) {
+  const response = await fetch("http://localhost:8080/posts/" + params.id);
+  const data = await response.json();
+  console.log('EditPost: Post loaded', data);
+  return data;
 }

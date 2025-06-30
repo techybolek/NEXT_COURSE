@@ -7,7 +7,7 @@ function Modal({ children }) {
   const navigate = useNavigate();
 
   function onClose() {
-    console.log('onClose');
+    console.log('Modal: onClose');
     navigate('..');
   }
 
