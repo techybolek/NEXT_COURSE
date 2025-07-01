@@ -1,12 +1,25 @@
 import Modal from "../components/Modal";
 import { Form, redirect, Link, useLoaderData, useNavigation } from "react-router-dom";
 import classes from "./NewPost.module.css";
+import { decodeUrlId } from '../utils/urlUtils';
 
 function EditPost() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const isLoading = navigation.state === "loading";
   const post = useLoaderData();
+  
+  console.log('EditPost Component - Received post data:', post);
+  console.log('EditPost Component - Post properties:', {
+    id: post?.id,
+    author: post?.author,
+    body: post?.body
+  });
+
+  if (!post) {
+    console.error('EditPost Component - No post data available');
+    return <div>Error: Post data not found</div>;
+  }
 
   return (
     <Modal>
@@ -18,6 +31,7 @@ function EditPost() {
       ) : (
         <Form method="put" className={classes.form}>
           <h2>Edit Post</h2>
+          <input type="hidden" name="id" value={post.id} />
           <div>
             <label htmlFor="author">Author</label>
             <input type="text" id="author" name="author" required disabled={isSubmitting} defaultValue={post.author} />
@@ -47,6 +61,7 @@ export async function action({ request }) {
     console.log('EditPost: Saving post');
     const formData = await request.formData();
     const postData = Object.fromEntries(formData.entries());
+    console.log('EditPost: Post data:', postData);
 
     const response = await fetch("http://localhost:8080/posts/" + postData.id, {
       method: "PUT",
@@ -63,15 +78,17 @@ export async function action({ request }) {
     await response.json();
     console.log('NewPost: Post created');
     
-    return  redirect('/');
+    return redirect('/');
   } catch (error) {
     return { error: error.message };
   }
 }
 
 export async function loader({ params }) {
-  const response = await fetch("http://localhost:8080/posts/" + params.id);
+  console.log('EditPost Loader - Fetching post with ID:', params.id);
+  const actualId = decodeUrlId(params.id);
+  const response = await fetch("http://localhost:8080/posts/" + actualId);
   const data = await response.json();
-  console.log('EditPost: Post loaded', data);
-  return data;
+  console.log('EditPost Loader - Raw response data:', data);
+  return data.post;
 }

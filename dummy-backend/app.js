@@ -11,7 +11,7 @@ app.use((req, res, next) => {
   // Attach CORS headers
   // Required when using a detached backend (that runs on a different domain)
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
@@ -19,13 +19,15 @@ app.use((req, res, next) => {
 app.get('/posts', async (req, res) => {
   const storedPosts = await getStoredPosts();
   console.log('Getting posts from backend...');
-  await new Promise((resolve, reject) => setTimeout(() => resolve(), 2500));
+  await new Promise((resolve, reject) => setTimeout(() => resolve(), 1000));
   res.json({ posts: storedPosts });
 });
 
 app.get('/posts/:id', async (req, res) => {
+  console.log('Getting post from backend with id:', req.params.id);
   const storedPosts = await getStoredPosts();
   const post = storedPosts.find((post) => post.id === req.params.id);
+  console.log('Found post:', post);
   res.json({ post });
 });
 
